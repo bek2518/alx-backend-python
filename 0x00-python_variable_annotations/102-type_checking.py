@@ -6,6 +6,10 @@ from typing import Tuple, List, Union
 
 
 def zoom_array(lst: Tuple, factor: int = 2) -> List:
+    '''
+    Function that accepts a tuple lst and an int factor with default
+    value of 2 and returns a list
+    '''
     zoomed_in: List = [
         item for item in lst
         for i in range(int(factor))
