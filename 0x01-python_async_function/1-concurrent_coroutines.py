@@ -21,7 +21,7 @@ async def wait_n(n: int, max_delay: int) -> list:
         listOfDelay.append(delay)
         i += 1
 
-    def recurseSort(listOfDelay, sortedList):
+    def recurseSort(listOfDelay: list, sortedList: list) -> list:
         '''
         Function to sort the list in ascending order
         '''
