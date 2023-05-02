@@ -13,14 +13,26 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     n times with specified max_delay and returns list of the delays in
     ascending order without using sort()
     '''
-    listOfDelay: List[float] = []
-    sortedList: List[float] = []
+    listOfDelay: list = []
+    sortedList: list = []
     i: int = 0
+    while (i < n):
+        delay = await wait_random(max_delay)
+        listOfDelay.append(delay)
+        i += 1
 
-    listOfDelay = [wait_random(max_delay) for i in range(0, n)]
+    def recurseSort(listOfDelay, sortedList):
+        '''
+        Function to sort the list in ascending order
+        '''
+        if (len(listOfDelay) != 0):
+            minimum = min(listOfDelay)
+            sortedList.append(minimum)
+            listOfDelay.remove(minimum)
+            return recurseSort(listOfDelay, sortedList)
+        else:
+            return sortedList
 
-    for delay in asyncio.as_completed(listOfDelay):
-        delayed = await delay
-        sortedList.append(delayed)
+    recurseSort(listOfDelay, sortedList)
 
     return sortedList
