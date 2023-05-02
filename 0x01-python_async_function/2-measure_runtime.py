@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 '''
-
+Function that measures total execution time
 '''
+import time
 import asyncio
-from typing import List
-wait_random = __import__('0-basic_async_syntax').wait_random
+wait_n = __import__('1-concurrent_coroutines').wait_n
 
 
-async def wait_n(n: int, max_delay: int) -> List[float]:
+def measure_time(n: int, max_delay: int) -> float:
     '''
-    Async routine takes int arguments n and max_delay, spawns wait_random
-    n times with specified max_delay and returns list of the delays in
-    ascending order without using sort()
+    Function that measures total execution time for wait_n and returns
+    total_time / n
     '''
-    sortedList: List[float] = []
+    start = time.time()
+    asyncio.run(wait_n(n, max_delay))
+    end = time.time()
 
-    listOfDelay = [wait_random(max_delay) for i in range(0, n)]
-
-    for delay in asyncio.as_completed(listOfDelay):
-        delayed = await delay
-        sortedList.append(delayed)
-
-    return sortedList
+    total_time = end - start
+    return (total_time / 2)
