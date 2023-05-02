@@ -16,23 +16,11 @@ async def wait_n(n: int, max_delay: int) -> list:
     listOfDelay: list = []
     sortedList: list = []
     i: int = 0
-    while (i < n):
-        delay = await wait_random(max_delay)
-        listOfDelay.append(delay)
-        i += 1
 
-    def recurseSort(listOfDelay: list, sortedList: list) -> list:
-        '''
-        Function to sort the list in ascending order
-        '''
-        if (len(listOfDelay) != 0):
-            minimum = min(listOfDelay)
-            sortedList.append(minimum)
-            listOfDelay.remove(minimum)
-            return recurseSort(listOfDelay, sortedList)
-        else:
-            return sortedList
+    listOfDelay = [wait_random(max_delay) for i in range(0, n)]
 
-    recurseSort(listOfDelay, sortedList)
+    for delay in asyncio.as_completed(listOfDelay):
+        delayed = await delay
+        sortedList.append(delayed)
 
     return sortedList
