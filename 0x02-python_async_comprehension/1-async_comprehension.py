@@ -12,4 +12,4 @@ async def async_comprehension():
     over async_generator
     '''
     result = [i async for i in async_generator()]
-    return result
+    return (result)
