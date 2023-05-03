@@ -3,10 +3,11 @@
 Coroutine that loops 10 times and return random number
 uses async comprehesion
 '''
+from typing import List
 async_generator = __import__('0-async_generator').async_generator
 
 
-async def async_comprehension():
+async def async_comprehension() -> List[float]:
     '''
     Coroutine that collect 10 randim numbers using async comprehension
     over async_generator
