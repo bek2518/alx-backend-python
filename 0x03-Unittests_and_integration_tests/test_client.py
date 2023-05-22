@@ -42,5 +42,25 @@ class TestGithubOrgClient(unittest.TestCase):
             result = GithubOrgClient('google')._public_repos_url
             self.assertEqual(result, repo_url)
 
+    @patch('client.get_json')
+    @patch.object(GithubOrgClient, '_public_repos_url',
+                  new_callable=PropertyMock)
+    def test_public_repos(self, mock_method, mock_thing):
+        '''
+        Method that tests public_repos of GithubOrgClient
+        '''
+        test_payload = [
+            {'name': 'nginx', 'owner': {'login': 'MIT'}},
+            {'name': 'apache', 'owner': {'login': 'Apache'}},
+            {'name': 'webkit', 'owner': {'login': 'GPL'}},
+        ]
+        repos_url = 'https://api.github.com/orgs/google/repos'
+        mock_method.return_value = repos_url
+        mock_thing.return_value = test_payload
+        result = GithubOrgClient('google').public_repos()
+        mock_thing.assert_called_once_with(repos_url)
+        mock_method.assert_called_once()
+        self.assertEqual(result, ['nginx', 'apache', 'webkit'])
+
     if __name__ == '__main__':
         unittest.main()
