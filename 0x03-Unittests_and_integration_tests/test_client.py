@@ -3,9 +3,10 @@
 Tests the GithubOrgClient class
 '''
 import unittest
-from parameterized import parameterized
-from unittest.mock import patch, PropertyMock
+from parameterized import parameterized, parameterized_class
+from unittest.mock import patch, PropertyMock, Mock, MagicMock
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -71,6 +72,39 @@ class TestGithubOrgClient(unittest.TestCase):
         Method that tests has_license from GithubOrgClient
         '''
         self.assertEqual(GithubOrgClient.has_license(repo, license), expected)
+
+
+@parameterized_class([
+    {
+        'org_payload': TEST_PAYLOAD[0][0],
+        'repos_payload': TEST_PAYLOAD[0][1],
+        'expected_repos': TEST_PAYLOAD[0][2],
+        'apache2_repos': TEST_PAYLOAD[0][3]
+    }
+])
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    '''
+    Class that inherits from unittest and implements an integration test
+    on public_repos method
+    '''
+    @classmethod
+    def setUpClass(cls):
+        '''
+        Setup class that starts patcher
+        '''
+        cls.mock_thing.side_effect = [
+            MagicMock(json=MagicMock(return_value=cls.org_payload)),
+            MagicMock(json=MagicMock(return_value=cls.repos_payload)),
+        ]
+        cls.patcher = patch('requests.get')
+        cls.mock_thing = cls.patcher.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        '''
+        Teardown class that stops patcher
+        '''
+        cls.patcher.stop()
 
     if __name__ == '__main__':
         unittest.main()
