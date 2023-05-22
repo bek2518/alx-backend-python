@@ -96,7 +96,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             MagicMock(json=MagicMock(return_value=cls.org_payload)),
             MagicMock(json=MagicMock(return_value=cls.repos_payload)),
         ]
-        cls.patcher = patch('requests.get')
+        cls.get_patcher = patch('requests.get')
         cls.mock_thing = cls.patcher.start()
 
     @classmethod
@@ -104,7 +104,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         '''
         Teardown class that stops patcher
         '''
-        cls.patcher.stop()
+        cls.get_patcher.stop()
 
     if __name__ == '__main__':
         unittest.main()
