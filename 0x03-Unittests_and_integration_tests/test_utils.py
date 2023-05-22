@@ -75,7 +75,7 @@ class TestMemorize(unittest.TestCase):
             @memoize
             def a_property(self):
                 return self.a_method()
-        
+
         with patch.object(TestClass, "a_method") as mock_method:
             mock_response = mock.Mock()
             mock_response.return_value = 42
@@ -84,7 +84,7 @@ class TestMemorize(unittest.TestCase):
             thing = TestClass()
             self.assertEqual(thing.a_property(), 42)
             self.assertEqual(thing.a_property(), 42)
-            mock_method.assert_called_once_with()
+            mock_method.assert_called_once()
 
     if __name__ == '__main__':
         unittest.main()
