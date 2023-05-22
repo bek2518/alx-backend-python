@@ -5,7 +5,7 @@ to return
 '''
 import unittest
 from parameterized import parameterized
-from utils import access_nested_map, get_json
+from utils import access_nested_map, get_json, memoize
 from unittest import mock
 from unittest.mock import patch
 
@@ -56,6 +56,35 @@ class TestGetJson(unittest.TestCase):
             result = get_json(test_url)
             mock_thing.assert_called_once_with(test_url)
             self.assertEqual(result, test_payload)
+
+
+class TestMemorize(unittest.TestCase):
+    '''
+    Class that inherits from unittest and implements different methods
+    to test memoize decorator in utils
+    '''
+    def test_memoize(self):
+        '''
+        Method that tests memoize using mock patch
+        '''
+        class TestClass:
+
+            def a_method(self):
+                return 42
+
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        with patch.object(TestClass, "a_method") as mock_method:
+            mock_response = mock.Mock()
+            mock_response.return_value = 42
+            mock_method.return_value = mock_response
+
+            thing = TestClass()
+            thing.a_property()
+            thing.a_property()
+            mock_method.assert_called_once_with()
 
     if __name__ == '__main__':
         unittest.main()
