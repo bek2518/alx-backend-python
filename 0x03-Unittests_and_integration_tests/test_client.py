@@ -92,12 +92,26 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         '''
         Setup class that starts patcher
         '''
+        cls.get_patcher = patch('requests.get')
+        cls.mock_thing = cls.get_patcher.start()
         cls.mock_thing.side_effect = [
             MagicMock(json=MagicMock(return_value=cls.org_payload)),
             MagicMock(json=MagicMock(return_value=cls.repos_payload)),
         ]
-        cls.get_patcher = patch('requests.get')
-        cls.mock_thing = cls.patcher.start()
+
+    def test_public_repos(self):
+        '''
+        Method that tests public_repos
+        '''
+        result = GithubOrgClient('google').public_repos()
+        self.assertEqual(result, self.expected_repos)
+
+    def test_public_repos_with_license(self):
+        '''
+        Method that tests public_repos
+        '''
+        result = GithubOrgClient('google').public_repos(license="apache-2.0")
+        self.assertEqual(result, self.apache2_repos)
 
     @classmethod
     def tearDownClass(cls):
