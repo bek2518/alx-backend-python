@@ -62,5 +62,15 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_method.assert_called_once()
         self.assertEqual(result, ['nginx', 'apache', 'webkit'])
 
+    @parameterized.expand([
+        ({"license": {"key": "my_license"}}, "my_license", True),
+        ({"license": {"key": "other_license"}}, "my_license", False)
+    ])
+    def test_has_license(self, repo, license, expected):
+        '''
+        Method that tests has_license from GithubOrgClient
+        '''
+        self.assertEqual(GithubOrgClient.has_license(repo, license), expected)
+
     if __name__ == '__main__':
         unittest.main()
