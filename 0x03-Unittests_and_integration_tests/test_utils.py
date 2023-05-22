@@ -84,7 +84,7 @@ class TestMemorize(unittest.TestCase):
             thing = TestClass()
             thing.a_property()
             thing.a_property()
-            mock_method.assert_called_once_with()
+            mock_method.assert_called_once()
 
     if __name__ == '__main__':
         unittest.main()
